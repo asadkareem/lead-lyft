@@ -1,0 +1,1 @@
+/* Had the session on Google Tag Manager in specific and JavaScript in Genera

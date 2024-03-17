@@ -1,0 +1,12 @@
+module.exports.authService = require('./auth.service');
+module.exports.emailService = require('./email.service');
+module.exports.tokenService = require('./token.service');
+module.exports.userService = require('./user.service');
+// module.exports.listingService = require('./listing.service');
+// module.exports.communicationService = require('./communication.service');
+// module.exports.reportService = require('./report.service');
+module.exports.departmentService = require('./department.service');
+module.exports.leadLyftCategoryService = require('./leadlyftcat.service');
+module.exports.clientLeadLyftsService = require('./clientLeadLyft.service');
+module.exports.clientHabitService = require('./clientHabit.service');
+module.exports.clientActionService = require('./clientAction.service');

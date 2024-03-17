@@ -1,0 +1,155 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              Int      @id @default(autoincrement())
+  email           String   @unique
+  firstName       String?
+  lastName        String?
+  password        String
+  role            Role     @default(CLIENT)
+  isEmailVerified Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  Token           Token[]
+  leadLyfts        LeadLyft[]
+  clientHabits    Habit[]
+  clientActions   Action[]
+  userNotes     Note[]
+  departmentId Int?      
+  department    Department? @relation(fields: [departmentId],references:[id])
+   // New field for establishing the relationship
+  coachId           Int?
+  clients           User[]   @relation("CoachClients")
+  coach             User?    @relation("CoachClients", fields: [coachId], references: [id])
+}
+
+model Token {
+  id          Int       @id @default(autoincrement())
+  token       String
+  type        TokenType
+  expires     DateTime
+  blacklisted Boolean
+  createdAt   DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
+
+}
+
+enum Role {
+  CLIENT
+  ADMIN
+  COACH
+  CORPORATE
+}
+
+enum TokenType {
+  ACCESS
+  REFRESH
+  RESET_PASSWORD
+  VERIFY_EMAIL
+}
+
+model Department{
+  id              Int       @id @default(autoincrement())
+  departmentName  String
+  companyId       Int
+  company         Company   @relation(fields: [companyId],references: [id])
+  users          User[]
+}
+
+model Company{
+  id Int @id @default(autoincrement())
+  companyName String
+  departments Department[]
+}
+
+model LeadLyftCategory{
+  id Int @id @default(autoincrement())
+  leadLyftCatName String
+  leadLyftCatMinScore Float
+  leadLyftCatMaxScore Float
+  leadLyfts LeadLyft[]
+  userActions Action[]
+}
+
+model LeadLyft{
+  id Int @id @default(autoincrement())
+  privateNote String?
+  leadLyftScore Float
+  leadLyftCatId Int
+  leadLyftCategory LeadLyftCategory @relation(fields: [leadLyftCatId], references: [id])
+  reason       String?
+  coahInputRequested Boolean? @default(false)
+  coachInputGranted Boolean? @default(false)
+  coachComments     String?
+  clientId          Int
+  user              User @relation(fields: [clientId], references: [id])
+  createdAt         DateTime           @default(now()) 
+  updatedAt         DateTime?           
+
+}
+
+
+model Habit{
+  id Int @id @default(autoincrement())
+  habitName String
+  habitGoalSet Int
+  note String?
+  habitGoalAchieved Int
+  coahInputRequested Boolean? @default(false)
+  coachInputGranted Boolean? @default(false)
+  coachComments     String?
+  clientId Int
+  user User @relation(fields: [clientId],references: [id])
+  createdAt         DateTime           @default(now()) 
+  updatedAt         DateTime?           
+
+}
+
+// model Action{
+//    id Int      @id @default(autoincrement())
+//    actionName String
+//    actionStatus ActionStatus @default(INCOMPLETE)
+//    private Boolean @default(true)
+//   actionsUser ActionUser[]
+// }
+
+enum ActionStatus {
+  INCOMPLETE
+  INPROGRESS
+  COMPLETED
+}
+model Action{
+  id Int @id @default(autoincrement())
+  actionName String
+  actionStatus ActionStatus @default(INCOMPLETE)
+  coahInputRequested Boolean? @default(false)
+  coachInputGranted Boolean? @default(false)
+  coachComments     String?
+  clientId Int
+  user User @relation(fields: [clientId],references: [id])
+  note String?
+  dueDate DateTime?
+  actionCategoryId Int?
+  actionCategory LeadLyftCategory? @relation(fields: [actionCategoryId],references: [id])
+}
+
+model Note{
+  id Int @id @default(autoincrement())
+  userId Int
+  user User @relation(fields: [userId],references: [id])
+}
+model Qoutes{
+  id Int @id @default(autoincrement())
+  text String
+}

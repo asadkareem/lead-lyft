@@ -1,0 +1,10 @@
+module.exports.authController = require('./auth.controller');
+module.exports.userController = require('./user.controller');
+module.exports.communicationController = require('./communication.controller');
+module.exports.listingController = require('./listing.controller');
+module.exports.reportController = require('./report.controller');
+module.exports.departmentController = require('./department.controller');
+module.exports.leadLyftCategoryController = require('./leadLyftCategory.controller');
+module.exports.clientLeadLyftsController = require('./clientLeadLyfts.controller');
+module.exports.clientsHabitsController = require('./clientHabits.controller');
+module.exports.clientActionController = require('./clientAction.controller');
